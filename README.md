@@ -1,7 +1,6 @@
 #START#
 Pour démarrer il faut ouvrir deux terminal , un avec la commande watch et l'autre dev
-Sans oublier maintenant, qu'il faut ouvrir les deux redis ( cli et server )
-PB : em est indéfini !!!
+Sans oublier maintenant, qu'il faut ouvrir les deux redis ( cli et server ) , mais on peut mettre le chemin du server dans pATH ( variable d'environnements)
 
 0.  npm -y : Créer le package.json , le -y dis oui à tout
     npm install -D @types/node typescript : rajouter typescript
@@ -34,3 +33,14 @@ PB : em est indéfini !!!
 9.  Problème rencontrés avec Express.Session , pas reconnu à cause d'un changement de version il a fallu enlever le context dans Appollo serveur
     et mettre une autre ligne pour indiquer le paramètre de session
 10. Pb rencontrés car il faut installer redis sur le pc
+
+11. Explication des sessions
+    Dans Redis :
+    req.session.userId = user.id
+    {userId : 1 } -> send that to redis
+
+    sess : sdqkfjsqdflef -> { userId : 1}
+    express-session will set a cookie on my browser fdkghjsdfsqf
+    When user makes a request : sqjdfiqshbxc -> sent to the server
+    Decrypt the cookie : dfjhgfddf - -> sess : sdqkfjsqdflef
+    Make a request to redis -> sess : sdqkfjsqdflef -> { userId : 1}

@@ -34,7 +34,6 @@ const main = async () => {
       saveUninitialized: false,
       secret: "dsqfgf", // TODO  : environnement variable à faire qu'il faudra cacher
       resave: false,
-
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // * 10 years,
         httpOnly: true,
@@ -50,7 +49,7 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: () => ({ em: orm.em }),
+    context: ({ req, res }) => ({ em: orm.em, req, res }), // ! SI on enlève ça , les fonctions ne vont plus reconnaiter em
   });
 
   apolloServer.applyMiddleware({ app });

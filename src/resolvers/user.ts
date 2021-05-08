@@ -7,6 +7,7 @@ import {
   InputType,
   Mutation,
   ObjectType,
+  Query,
   Resolver,
 } from "type-graphql";
 import argon2 from "argon2";
@@ -39,10 +40,22 @@ class UserResponse {
 //  *  GraphQL query example
 @Resolver()
 export class UserResolver {
+  @Query(() => User, { nullable: true })
+  async me(@Ctx() { req, em }: MyContext) {
+    // * If you're not logged in
+    if (!req.session.userId) {
+      /*console.log("try : ", req.session);
+      console.log("ID TRY : ", req.session.userId);*/
+      return null;
+    }
+    const user = await em.findOne(User, { _id: req.session.userId });
+    return user;
+  }
+
   @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { req, em }: MyContext
   ) {
     if (options.username.length <= 2) {
       return {
@@ -75,7 +88,8 @@ export class UserResolver {
         };
       }
     }
-
+    // *  Store ID in Cookie to keep it logged in
+    req.session.userId = user._id;
     return { user };
   }
 
@@ -107,6 +121,9 @@ export class UserResolver {
       };
     }
     req.session.userId = user._id; // * Variable que l'on crée dans le quel on va stocker des infos
+
+    /*console.log("FACTS : ", req.session);
+    console.log("ID FACTS : ", req.session.userId);*/
     return { user };
   }
 }
