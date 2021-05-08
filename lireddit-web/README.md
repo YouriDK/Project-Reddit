@@ -13,3 +13,7 @@ Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_mediu
 # NEXTJS
 
 Tips. une page crée devient automatiquent une route ( ex : localhost/register )
+
+1.  Pour sortir le fichier tsx dans generated il fallait installer @graphql-codegen/typescript-operations
+2.  La méthodologie mainetant c'est écrire la query dans le dossier graphql puis éxéctuer npm run gen pour créer le fichier tsx dans generated et ainsi pouvoir directement  
+    utiliser le ficher correctement

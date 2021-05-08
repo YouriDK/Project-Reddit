@@ -13,6 +13,7 @@ import { UserResolver } from "./resolvers/user";
 import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
+import cors from "cors";
 
 const main = async () => {
   const orm = await MikroORM.init(microConfig);
@@ -22,6 +23,14 @@ const main = async () => {
 
   const RedisStore = connectRedis(session);
   const redisClient = redis.createClient();
+
+  // * Permet d'aviter le CORS error dans le front
+  app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+    })
+  );
 
   // ! SESSION MIDDLEWARE
   app.use(
@@ -52,7 +61,10 @@ const main = async () => {
     context: ({ req, res }) => ({ em: orm.em, req, res }), // ! SI on enlève ça , les fonctions ne vont plus reconnaiter em
   });
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({
+    app,
+    cors: false, // * Permet d'aviter le CORS error dans le front
+  });
 
   app.listen(4000, () => {
     console.log("Server started on locahost:4000 !! ");
