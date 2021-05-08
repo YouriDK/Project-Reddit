@@ -44,3 +44,7 @@ Sans oublier maintenant, qu'il faut ouvrir les deux redis ( cli et server ) , ma
     When user makes a request : sqjdfiqshbxc -> sent to the server
     Decrypt the cookie : dfjhgfddf - -> sess : sdqkfjsqdflef
     Make a request to redis -> sess : sdqkfjsqdflef -> { userId : 1}
+
+    # PASSAGE AU FRONT END
+
+12.
