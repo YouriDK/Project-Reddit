@@ -2,6 +2,7 @@ import { __prod__ } from "./constant";
 import { Post } from "./entities/Post";
 import { MikroORM } from "@mikro-orm/core";
 import path from "path";
+import { User } from "./entities/User";
 
 export default {
   migrations: {
@@ -9,7 +10,7 @@ export default {
     pattern: /^[\w-]+\d+\.[tj]s$/, // regex pattern for the migration files
   },
 
-  entities: [Post], // * table de données
+  entities: [Post, User], // * table de données , on met toutes les entitiés crée que l'on va utiliser
   dbName: "lireddit",
   //* Infos néccessaire
   port: 5433,

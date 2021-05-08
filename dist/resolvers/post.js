@@ -33,6 +33,7 @@ let PostResolver = class PostResolver {
     }
     CreatePost(title, { em }) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("HEY : ", em);
             const post = em.create(Post_1.Post, { title });
             yield em.persistAndFlush(post);
             return post;
