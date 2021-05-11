@@ -7,18 +7,29 @@ import { Box } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 import { useMutation } from "urql";
 import { useRegisterMutation } from "../generated/graphql";
+import { responsePathAsArray } from "graphql";
+import toErrorMap from "../utils/toErrorMap";
+import { useRouter } from "next/router";
+
 interface registerProps {}
 
 export const Register: React.FC<registerProps> = ({}) => {
+  const router = useRouter();
   const [, register] = useRegisterMutation();
   return (
     <Wrapper variant="small">
       {" "}
       <Formik
         initialValues={{ username: "", password: "" }}
-        onSubmit={(values) => {
-          console.log(values);
-          return register(values);
+        onSubmit={async (values, { setErrors }) => {
+          const response = await register(values);
+          if (response.data?.register.errors) {
+            // * Avec le ? on va pouvoir gérer le fait que response puisse être undefined
+            setErrors(toErrorMap(response.data.register.errors));
+          } else if (response.data?.register.user) {
+            // * Worked
+            router.push("/");
+          }
         }}
       >
         {({ isSubmitting }) => (
@@ -38,7 +49,7 @@ export const Register: React.FC<registerProps> = ({}) => {
               ></InputField>
             </Box>
             <Button
-              tm={4}
+              mt={4}
               type="submit"
               colorScheme="teal"
               isLoading={isSubmitting}
