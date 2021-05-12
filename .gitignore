@@ -1,3 +1,5 @@
 node_modules
 lireddit-server/node_modules
+lireddit-server/dist
 lireddit-web/node_modules
+lireddit-web/.next
