@@ -36,4 +36,19 @@ Tips. une page crée devient automatiquent une route ( ex : localhost/register )
     );
     },
 
-au niveau de (result, query) , le type n'était pas bon , il fallait rajouter \_id dans la récupération d'infos pour le login et le register
+    au niveau de (result, query) , le type n'était pas bon , il fallait rajouter \_id dans la récupération d'infos pour le login et le register
+
+4.  Diff between server side on & off
+    Server side rendering : charge les données du côté serveur et ensuite affiche la page sans indicateur de chargement ( genre le Loading)
+    Server side off : il charge la page, et ensuite il va chercher les données côté serveur ce qui peut laisser paraitre une page de chargement( genre le Loading)
+    Si les données doivent être trouvés par un bon SEO ( ex : Google ), alors on active le SSR
+
+    SSR :
+    me -> browse http://local:3000
+    _ next.js server
+    _ requestion graphql server http://local:4000
+    _ building the HTML
+    _ sending back to your browser
+
+    Il y a server side rendering & client rendering
+    Navbar fetch le current user, navbar est sur index et pr index ssr est true donc il va request au nextjs mais il n'a pas de cookie , c'est pour ça si on fait un console.log , ce sera null , il faut donc que lorsque que c'est un serverside rendering il n'appelle pas le serveur inutilement

@@ -18,8 +18,12 @@ export class User {
 
   @Field() //* # , Si je met FIeld en Commentaire il ne sera pa visible dans le graphQL
   @Property({ type: "text", unique: true })
-  username: string;
+  username!: string;
+
+  @Field()
+  @Property({ type: "text", unique: true })
+  email!: string;
 
   @Property({ type: "text" })
-  password: string;
+  password!: string;
 }

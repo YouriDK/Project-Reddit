@@ -1,5 +1,5 @@
 import { User } from "../entities/User";
-import { MyContext } from "src/types";
+import { MyContext } from "../types";
 import {
   Arg,
   Ctx,
@@ -12,6 +12,7 @@ import {
 } from "type-graphql";
 import argon2 from "argon2";
 import { EntityManager } from "@mikro-orm/postgresql";
+import { COOKIE_NAME } from "../constant";
 
 @InputType()
 class UsernamePasswordInput {
@@ -41,6 +42,14 @@ class UserResponse {
 //  *  GraphQL query example
 @Resolver()
 export class UserResolver {
+  @Mutation(() => Boolean)
+  async forgotpassword() //@Arg("email") email: string,
+  // @Ctx() /*em*/ {}: MyContext
+  {
+    //const user = await em.findOne(User, {email})
+    return true;
+  }
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req, em }: MyContext) {
     // * If you're not logged in
@@ -74,11 +83,7 @@ export class UserResolver {
     }
     const hashedPassword = await argon2.hash(options.password);
     let user;
-    /*
-    const user = em.create(User, {
-      username: options.username,
-      password: hashedPassword,
-    });*/
+
     try {
       const result = await (em as EntityManager)
         .createQueryBuilder(User)
@@ -138,5 +143,19 @@ export class UserResolver {
     /*console.log("FACTS : ", req.session);
     console.log("ID FACTS : ", req.session.userId);*/
     return { user };
+  }
+
+  @Mutation(() => Boolean)
+  logout(@Ctx() { req, res }: MyContext) {
+    return new Promise((resolve) => {
+      req.session.destroy((err) => {
+        res.clearCookie(COOKIE_NAME);
+        if (err) {
+          console.log(err);
+          resolve(false);
+        }
+        resolve(true);
+      });
+    });
   }
 }

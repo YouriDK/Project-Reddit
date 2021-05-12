@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { MikroORM } from "@mikro-orm/core";
-import { __prod__ } from "./constant";
+import { COOKIE_NAME, __prod__ } from "./constant";
 //import { Post } from "./entities/Post";
 import microConfig from "./mikro-orm.config";
 import express from "express";
@@ -14,8 +14,10 @@ import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
+//import { sendEmail } from "./utils/sendEmail";
 
 const main = async () => {
+  //sendEmail("bob@bob.com", "Hello Buddy");
   const orm = await MikroORM.init(microConfig);
   await orm.getMigrator().up(); // *  Connect to DB, run Migration etc...
 
@@ -35,20 +37,20 @@ const main = async () => {
   // ! SESSION MIDDLEWARE
   app.use(
     session({
-      name: "qid",
+      name: COOKIE_NAME,
       store: new RedisStore({
         client: redisClient,
         disableTouch: true,
       }),
-      saveUninitialized: false,
-      secret: "dsqfgf", // TODO  : environnement variable à faire qu'il faudra cacher
-      resave: false,
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // * 10 years,
         httpOnly: true,
         sameSite: "lax", // TODO rechercher ce que ça fait (csrf)
         secure: __prod__, // * Cookie onlky wokrs on https
       },
+      saveUninitialized: false,
+      secret: "dsqfgf", // TODO  : environnement variable à faire qu'il faudra cacher
+      resave: false,
     })
   );
 
