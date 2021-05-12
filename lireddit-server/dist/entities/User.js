@@ -40,7 +40,7 @@ __decorate([
 ], User.prototype, "username", void 0);
 __decorate([
     type_graphql_1.Field(),
-    core_1.Property({ type: "text", unique: true }),
+    core_1.Property({ type: "text", unique: true, nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([

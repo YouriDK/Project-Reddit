@@ -18,6 +18,7 @@ import cors from "cors";
 
 const main = async () => {
   //sendEmail("bob@bob.com", "Hello Buddy");
+
   const orm = await MikroORM.init(microConfig);
   await orm.getMigrator().up(); // *  Connect to DB, run Migration etc...
 
