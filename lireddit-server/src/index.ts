@@ -10,10 +10,11 @@ import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
-import redis from "redis";
+//import redis from "redis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
+import Redis from "ioredis";
 //import { sendEmail } from "./utils/sendEmail";
 
 const main = async () => {
@@ -25,7 +26,7 @@ const main = async () => {
   const app = express();
 
   const RedisStore = connectRedis(session);
-  const redisClient = redis.createClient();
+  const redis = new Redis();
 
   // * Permet d'aviter le CORS error dans le front
   app.use(
@@ -40,7 +41,7 @@ const main = async () => {
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
-        client: redisClient,
+        client: redis,
         disableTouch: true,
       }),
       cookie: {
@@ -61,7 +62,7 @@ const main = async () => {
       resolvers: [HelloResolver, PostResolver, UserResolver],
       validate: false,
     }),
-    context: ({ req, res }) => ({ em: orm.em, req, res }), // ! SI on enlève ça , les fonctions ne vont plus reconnaiter em
+    context: ({ req, res }) => ({ em: orm.em, req, res, redis }), // ! SI on enlève ça , les fonctions ne vont plus reconnaiter em
   });
 
   apolloServer.applyMiddleware({

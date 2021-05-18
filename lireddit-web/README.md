@@ -52,3 +52,6 @@ Tips. une page crée devient automatiquent une route ( ex : localhost/register )
 
     Il y a server side rendering & client rendering
     Navbar fetch le current user, navbar est sur index et pr index ssr est true donc il va request au nextjs mais il n'a pas de cookie , c'est pour ça si on fait un console.log , ce sera null , il faut donc que lorsque que c'est un serverside rendering il n'appelle pas le serveur inutilement
+
+5.  Pour la page token on a écrit "New File" -> change-password/[token].tsx
+    Ainsi on a crée un dossier change-password avec une page [token] , ça ceut dire que le token est amené à changeé
